@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import LoginService from './LoginService';
+import LoginService from '../service/LoginService';
 
-class loginController{
+class LoginController{
   constructor(protected loginService: LoginService){ }
 
   public login = async(req: Request, res: Response): Promise<Response> =>{
@@ -18,4 +18,4 @@ class loginController{
   };
 }
 
-export default loginController;
+export default  LoginController ;
