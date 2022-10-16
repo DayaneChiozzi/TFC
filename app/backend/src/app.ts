@@ -1,4 +1,5 @@
 import * as express from 'express';
+import tokenValidate from './middlewares/TokenValidation';
 import LoginValidation from './middlewares/loginValidation';
 import LoginController from './MSC/controllers/loginController';
 
@@ -16,7 +17,7 @@ class App {
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
     this.app.post('/login', loginValidation.loginVerify, loginController.login);
-    // this.app.get('/login/validate', loginController.login);
+    this.app.get('/login/validate', tokenValidate, loginController.getRoleUser);
   }
 
   private config():void {

@@ -14,10 +14,16 @@ class LoginService {
       throw new Error('email not found');
     }
     // const resultPassword = bcrypt.compareSync(password, resultUser.password);
-    // console.log('SERVICE RESULTPASSWORD', resultPassword);
+    // console.log('SERVICE RESULTPASSWORD', resultPassword);user
 
     const generatedToken = Token.createToken(email);
     return generatedToken;
+  };
+
+  public getLoginValidate = async (userEmail: string) => {
+    const resultRoler = await this
+      .model.findOne({ where: { email: userEmail }, raw: true, attributes: ['role'] });
+    return resultRoler;
   };
 }
 

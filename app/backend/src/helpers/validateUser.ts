@@ -1,11 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 // import CustomError from '../errors/customError';
 
-// const PassVerify = (password: string) => {
-//   if (!password) throw new CustomError(400, FAULT_MESSAGE);
-//   if (password.length < 2) throw new CustomError(400, FAULT_MESSAGE);
-// };
-
 const userValidate = (req:Request, res:Response, next: NextFunction) => {
   const { email } = req.body;
 
