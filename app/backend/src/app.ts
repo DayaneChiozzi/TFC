@@ -1,5 +1,9 @@
 import * as express from 'express';
-import route from './route';
+import LoginValidation from './middlewares/loginValidation';
+import LoginController from './MSC/controllers/loginController';
+
+const loginController = new LoginController();
+const loginValidation = new LoginValidation();
 
 class App {
   public app: express.Express;
@@ -11,6 +15,7 @@ class App {
 
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
+    this.app.post('/login', loginValidation.loginVerify, loginController.login);
   }
 
   private config():void {
@@ -23,7 +28,6 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
-    this.app.use('/login',route.loginRoute);
   }
 
   public start(PORT: string | number):void {

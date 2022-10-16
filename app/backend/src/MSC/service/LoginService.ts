@@ -1,38 +1,42 @@
-import { compareSync } from 'bcryptjs';
-import CustomError from '../../errors/customError';
-import User from '../../database/models/User';
-import Token from '../../JWT/Token';
+// import { compareSync } from 'bcryptjs';
 
-const INCORRET_PASS_EMAIL = 'Incorrect email or password';
-const NOT_FOUND_TOKEN = 'Token not found';
+import Usermodel from '../../database/models/User';
+import Token from '../../JWT/Token';
+import IUser from '../../Interface/IUser';
+
+// const INCORRET_PASS_EMAIL = 'Incorrect email or password';
+// const NOT_FOUND_TOKEN = 'Token not found';
 
 class LoginService {
-  constructor(protected userModel: typeof User){ }
+  public model = Usermodel;
 
-  public login = async(email: string, password: string):Promise<string | undefined> => {
-    const resultUser = await this.userModel.findOne({ where: { email } });
-    if(!resultUser) throw new CustomError(401, INCORRET_PASS_EMAIL);
+  public login = async (email: string):Promise<object | string> => {
+    const resultUser = await this.model.findOne({ where: { email } }) as IUser;
 
-    const verifyPassword = compareSync(password, resultUser.password);
-    if(!verifyPassword) throw new CustomError(401, INCORRET_PASS_EMAIL);
+    if (!resultUser) {
+      throw new Error('email not found');
+    }
+
+    // const verifyPassword = compareSync(password, resultUser.password);
+    // if (!verifyPassword) throw new CustomError(401, INCORRET_PASS_EMAIL);
 
     const generatedToken = Token.createToken(email);
-    return generatedToken
-  }
+    return generatedToken;
+  };
 
-  public loginValidate = async (authorization: string | undefined, user: string) => {
-    if(!authorization) throw new CustomError(401,NOT_FOUND_TOKEN);
+  // public loginValidate = async (authorization: string | undefined, user: string) => {
+  //   if (!authorization) throw new CustomError(401, NOT_FOUND_TOKEN);
 
-    const resultAuthToken = Token.verifyToken(authorization);
-    if(!resultAuthToken) throw new CustomError(401,NOT_FOUND_TOKEN);
+  //   const resultAuthToken = Token.verifyToken(authorization);
+  //   if (!resultAuthToken) throw new CustomError(401, NOT_FOUND_TOKEN);
 
-    const resultUser = await this.userModel.findOne({
-      where: { email: user}, raw: true, attributes: ['role']
-    });
-    if(!resultUser) throw new CustomError(400, 'User not found');
+  //   const resultUser = await this.userModel.findOne({
+  //     where: { email: user }, raw: true, attributes: ['role'],
+  //   });
+  //   if (!resultUser) throw new CustomError(400, 'User not found');
 
-    return resultUser
-  }
+  //   return resultUser;
+  // };
 }
 
-export default LoginService
+export default LoginService;
