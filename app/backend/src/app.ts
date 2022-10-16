@@ -16,6 +16,7 @@ class App {
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
     this.app.post('/login', loginValidation.loginVerify, loginController.login);
+    // this.app.get('/login/validate', loginController.login);
   }
 
   private config():void {
