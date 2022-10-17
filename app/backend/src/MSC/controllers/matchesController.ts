@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import MatchesService from '../service/MatchesService';
+import CustomError from '../../errors/customError';
 
 class MatchesController {
   constructor(protected matchesService = new MatchesService()) { }
@@ -10,10 +11,16 @@ class MatchesController {
   };
 
   public create = async (req: Request, res: Response): Promise<Response> => {
-    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = req.body;
-    const resultBody = { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress };
-    const resultCreate = await this.matchesService.create(resultBody);
-    return res.status(201).json(resultCreate);
+    try {
+      const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress } = req.body;
+      const resultBody = { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress };
+      const resultCreate = await this.matchesService.create(resultBody);
+      return res.status(201).json(resultCreate);
+    } catch (error) {
+      // console.log(error);
+      const resultError = error as CustomError;
+      return res.status(resultError.status).json({ message: resultError.message });
+    }
   };
 
   public finishMatch = async (req: Request, res: Response): Promise<Response> => {
