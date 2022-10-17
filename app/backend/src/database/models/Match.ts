@@ -1,48 +1,47 @@
-
 import { INTEGER, BOOLEAN } from 'sequelize';
 import { Model } from 'sequelize/types';
 import db from '.';
 
-class Matche extends Model {
+class Match extends Model {
   public id!: number;
-  public home_team!: number;
-  public home_team_goals!: number;
-  public away_team!: number;
-  public away_team_goals!: number;
-  public in_progress!: boolean;
-
+  public homeTeam!: number;
+  public homeTeamGoals!: number;
+  public awayTeam!: number;
+  public awayTeamGoals!: number;
+  public inProgress!: boolean;
 }
 
-Matche.init({
+Match.init({
   id: {
     type: INTEGER,
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
   },
-  home_team: {
+  homeTeam: {
     type: INTEGER,
     allowNull: false,
   },
-  home_team_goals: {
+  homeTeamGoals: {
     type: INTEGER,
     allowNull: false,
   },
-  away_team: {
+  awayTeam: {
     type: INTEGER,
     allowNull: false,
   },
-  away_team_goals: {
+  awayTeamGoals: {
     type: INTEGER,
     allowNull: false,
   },
-  in_progress: {
+  inProgress: {
     type: BOOLEAN,
     allowNull: false,
-  }
+  },
 }, {
   underscored: true,
   sequelize: db,
   modelName: 'matches',
+  tableName: 'matches',
   timestamps: false,
-})
+});
