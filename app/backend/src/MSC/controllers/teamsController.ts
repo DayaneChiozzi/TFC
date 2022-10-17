@@ -10,6 +10,12 @@ class TeamsController {
     const result = await this.teamsService.getTeams();
     return res.status(200).json(result);
   };
+
+  public getTeamsByPk = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+    const result = await this.teamsService.getTeamsByPk(Number(id));
+    return res.status(200).json(result);
+  };
 }
 
 export default TeamsController;
