@@ -17,7 +17,6 @@ class MatchesController {
       const resultCreate = await this.matchesService.create(resultBody);
       return res.status(201).json(resultCreate);
     } catch (error) {
-      // console.log(error);
       const resultError = error as CustomError;
       return res.status(resultError.status).json({ message: resultError.message });
     }
