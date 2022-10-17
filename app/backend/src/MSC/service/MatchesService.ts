@@ -3,7 +3,7 @@ import MatchesModel from '../../database/models/Match';
 import TeamModel from '../../database/models/Team';
 import IMatch from '../../Interface/IMatch';
 // import IMatchResponse from '../../Interface/IMatchResponse';
-// import TeamsService from './TeamsService';
+import TeamsService from './TeamsService';
 
 // const implementada para incluir as keys teamHome e teamAway no resultTeams, raciocinio desenvolvido com a ajuda da colega Elaine Costa;
 const includeSequelize = [{
@@ -19,11 +19,11 @@ const includeSequelize = [{
 
 class MatchesService {
   public model = MatchesModel;
-  // public teamsService : TeamsService;
+  public teamsService : TeamsService;
 
-  // constructor() {
-  //   this.teamsService = new TeamsService();
-  // }
+  constructor() {
+    this.teamsService = new TeamsService();
+  }
 
   public getMatchAll = async ():Promise<IMatch[]> => {
     const resultTeams = await this.model.findAll({ include: includeSequelize });
@@ -31,16 +31,14 @@ class MatchesService {
   };
 
   public create = async (match: IMatch): Promise<IMatch> => {
-    const resultCreate = await this.model.create({ ...match });
     if (match.homeTeam === match.awayTeam) {
       throw new CustomError(401, 'It is not possible to create a match with two equal teams');
     }
-
-    // const checkHomeTeam = await this.model.findByPk(match.homeTeam);
-    // if (checkHomeTeam) {
-    //    throw new CustomError()
-    // }
-    // console.log('matchService', resultCreate);
+    const checkHomeTeam = await this.teamsService.getTeamsByPk(match.homeTeam);
+    if (!checkHomeTeam) {
+      throw new CustomError(404, 'There is no team with such id!');
+    }
+    const resultCreate = await this.model.create({ ...match });
     return resultCreate;
   };
 
