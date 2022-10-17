@@ -28,6 +28,14 @@ class MatchesService {
       homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
     return resultCreate as IMatch;
   };
+
+  public finishMatch = async (id: number): Promise<number> => {
+    await this.model.findByPk(id);
+    const resultModel = await this.model.update({ inProgress: false }, {
+      where: { id },
+    });
+    return resultModel[0];
+  };
 }
 
 export default MatchesService;
