@@ -21,6 +21,13 @@ class MatchesService {
     const resultTeams = await this.model.findAll({ include: includeSequelize });
     return resultTeams as IMatch[];
   };
+
+  public create = async ({
+    homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress }: IMatch): Promise<IMatch> => {
+    const resultCreate = await this.model.create({
+      homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress });
+    return resultCreate as IMatch;
+  };
 }
 
 export default MatchesService;
