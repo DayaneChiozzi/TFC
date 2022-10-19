@@ -27,6 +27,7 @@ class App {
     this.app.get('/matches', matchesController.getMatchAll);
     this.app.post('/matches', tokenValidate, matchesController.create);
     this.app.patch('/matches/:id/finish', matchesController.finishMatch);
+    this.app.patch('/matches/:id', matchesController.updateMatchGoals);
   }
 
   private config():void {
