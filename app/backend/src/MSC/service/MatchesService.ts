@@ -2,7 +2,6 @@ import CustomError from '../../errors/customError';
 import MatchesModel from '../../database/models/Match';
 import TeamModel from '../../database/models/Team';
 import IMatch from '../../Interface/IMatch';
-// import IMatchResponse from '../../Interface/IMatchResponse';
 import TeamsService from './TeamsService';
 
 // const implementada para incluir as keys teamHome e teamAway no resultTeams, raciocinio desenvolvido com a ajuda da colega Elaine Costa;
@@ -48,6 +47,18 @@ class MatchesService {
       where: { id },
     });
     return resultModel[0];
+  };
+
+  public updateMatchGoals = async (
+    id: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<number> => {
+    await this.model.findByPk(id);
+
+    const [resultModel] = await this.model
+      .update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+    return resultModel;
   };
 }
 
