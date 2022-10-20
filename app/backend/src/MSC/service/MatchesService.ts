@@ -1,3 +1,4 @@
+// import { Op, fn, col } from 'sequelize';
 import CustomError from '../../errors/customError';
 import MatchesModel from '../../database/models/Match';
 import TeamModel from '../../database/models/Team';
@@ -16,6 +17,13 @@ const includeSequelize = [{
   attributes: { exclude: ['id'] },
 }];
 
+// const test =   where: {
+//   [Op.and]: [
+//     { homeTeam: 16 },
+//     { inProgress: 0 },
+//   ],
+// },
+
 class MatchesService {
   public model = MatchesModel;
   public teamsService : TeamsService;
@@ -26,6 +34,13 @@ class MatchesService {
 
   public getMatchAll = async ():Promise<IMatch[]> => {
     const resultTeams = await this.model.findAll({ include: includeSequelize });
+    return resultTeams as IMatch[];
+  };
+
+  public getMatchAllTest = async ():Promise<IMatch[]> => {
+    const resultTeams = await this.model.findAll({
+      raw: true,
+    });
     return resultTeams as IMatch[];
   };
 
